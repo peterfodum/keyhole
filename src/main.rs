@@ -73,14 +73,14 @@ const PATTERNS: &[KeyPattern] = &[
         hint: "Rotate at https://platform.deepseek.com/api_keys",
     },
     KeyPattern {
-        name: "Cohere API Key",
-        regex: r"[a-zA-Z0-9]{40}",
+        name: "Cohere API Key (probable)",
+        regex: r"\b[a-zA-Z]{40}\b",
         severity: "MEDIUM",
         hint: "Check if this matches Cohere's key format. Rotate if so.",
     },
     KeyPattern {
-        name: "Together AI Key",
-        regex: r"[a-f0-9]{32,40}",
+        name: "Together AI Key (probable)",
+        regex: r"\b[a-f0-9]{32}\b",
         severity: "MEDIUM",
         hint: "Check if this matches Together AI key format. Rotate at https://api.together.xyz/settings/api-keys",
     },
@@ -252,6 +252,19 @@ fn scan(root: &str) -> Vec<Finding> {
             || path.to_string_lossy().contains("/__pycache__/")
         {
             continue;
+        }
+
+        // Skip lock files (checksum hex triggers false positives)
+        if let Some(ext) = path.extension() {
+            if ext == "lock" {
+                continue;
+            }
+        }
+        if let Some(fname) = path.file_name() {
+            let fname = fname.to_str().unwrap_or("");
+            if fname.ends_with(".lock") || fname == "package-lock.json" || fname == "yarn.lock" {
+                continue;
+            }
         }
 
         // Skip files > 1MB
