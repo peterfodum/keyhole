@@ -2,6 +2,7 @@
 name = "keyhole"
 version = "0.1.0"
 edition = "2021"
+authors = ["Diode Labs"]
 description = "🕳️🔑 Pre-commit scanner for AI API keys — catch leaks before they reach GitHub"
 license = "MIT"
 repository = "https://github.com/peterfodum/keyhole"
