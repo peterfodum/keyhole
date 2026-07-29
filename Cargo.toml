@@ -1,0 +1,28 @@
+[package]
+name = "keyhole"
+version = "0.1.0"
+edition = "2021"
+description = "🕳️🔑 Pre-commit scanner for AI API keys — catch leaks before they reach GitHub"
+license = "MIT"
+repository = "https://github.com/peterfodum/keyhole"
+keywords = ["security", "api-key", "pre-commit", "leak-detection", "ai"]
+categories = ["command-line-utilities", "development-tools"]
+
+[[bin]]
+name = "keyhole"
+path = "src/main.rs"
+
+[dependencies]
+regex = "1"
+colored = "2"
+walkdir = "2"
+ignore = "0.4"
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
